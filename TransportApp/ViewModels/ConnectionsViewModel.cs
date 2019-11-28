@@ -1,10 +1,13 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using SwissTransport;
 using TransportApp.Base;
 using TransportApp.Views;
 
 namespace TransportApp.ViewModels
 {
-    public class ConnectionsViewModel
+    public class ConnectionsViewModel : BaseViewModel
     {
         #region Initialization
 
@@ -14,41 +17,18 @@ namespace TransportApp.ViewModels
 
         #region Commands
 
-        #region Show connections
+        #region Search connection
 
-        public ICommand ShowConnectionsCommand => _showConnectionsCommand ?? (_showConnectionsCommand = new RelayCommand(OnExecuteShowConnections));
-        private ICommand _showConnectionsCommand;
+        public ICommand SearchConnectionCommand => _searchConnectionCommand ?? (_searchConnectionCommand = new RelayCommand(OnExecuteSearchConnection));
+        private ICommand _searchConnectionCommand;
 
-        private void OnExecuteShowConnections()
+        private void OnExecuteSearchConnection()
         {
-            var connectionsView = new ConnectionsView();
-            connectionsView.ShowDialog();
-        }
+            if(StartLocation == string.Empty || EndLocation == string.Empty)
+                return;
 
-        #endregion
-
-        #region Show station board
-
-        public ICommand ShowStationBoardCommand => _showStationBoardCommand ?? (_showStationBoardCommand = new RelayCommand(OnExecuteShowStationBoard));
-        private ICommand _showStationBoardCommand;
-
-        private void OnExecuteShowStationBoard()
-        {
-            var stationBoardView = new StationBoardView();
-            stationBoardView.ShowDialog();
-        }
-
-        #endregion
-
-        #region Show train station
-
-        public ICommand ShowTrainStation => _showTrainStation ?? (_showTrainStation = new RelayCommand(OnExecuteShowTrainStation));
-        private ICommand _showTrainStation;
-
-        private void OnExecuteShowTrainStation()
-        {
-            var trainStationView = new TrainStationView();
-            trainStationView.ShowDialog();
+            var transport = new Transport();
+            ConnectionList = transport.GetConnections(StartLocation, EndLocation);
         }
 
         #endregion
@@ -57,8 +37,47 @@ namespace TransportApp.ViewModels
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the start location.
+        /// </summary>
+        public string StartLocation
+        {
+            get => _startLocation;
+            set
+            {
+                _startLocation = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string _startLocation;
 
+        /// <summary>
+        /// Gets or sets the end location.
+        /// </summary>
+        public string EndLocation
+        {
+            get => _endLocation;
+            set
+            {
+                _endLocation = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string _endLocation;
 
+        /// <summary>
+        /// Gets or sets the connections.
+        /// </summary>
+        public Connections ConnectionList
+        {
+            get => _connectionList;
+            set
+            {
+                _connectionList = value;
+                RaisePropertyChanged();
+            }
+        }
+        private Connections _connectionList;
         #endregion
 
         #region Methods

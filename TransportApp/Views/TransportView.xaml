@@ -47,8 +47,8 @@
 
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,30,0,0">
             <TextBlock Text="Current location:" Margin="0,0,5,0" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding CurrentLocation}" IsReadOnly="True" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
-            <Button Content="Find connection" Style="{StaticResource DefaultButton}"/>
+            <TextBox Text="{Binding CurrentLocation}" IsReadOnly="True" Margin="0,0,20,0" VerticalContentAlignment="Center" BorderThickness="0"/>
+            <Button Content="Find connection" Style="{StaticResource DefaultButton}" Visibility="Collapsed"/>
         </StackPanel>
 
         <!--TODO Implement a real map https://github.com/ericnewton76/gmaps-api-net-->

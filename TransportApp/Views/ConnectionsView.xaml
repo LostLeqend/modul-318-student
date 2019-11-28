@@ -18,19 +18,11 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" x:Name="BtnConnections" Content="Connections" Command="{Binding ShowConnectionsCommand}" Margin="0,0,10,0" Style="{StaticResource DefaultButton}"/>
-            <Button Grid.Column="1" x:Name="BtnStationBoard" Content="StationBoard" Command="{Binding ShowStationBoardCommand}" Margin="0,0,10,0" Style="{StaticResource DefaultButton}"/>
-            <Button Grid.Column="2" x:Name="BtnTrainStation" Content="TrainStation" Command="{Binding ShowTrainStation}" Style="{StaticResource DefaultButton}"/>
+            <Button Content="Back" HorizontalAlignment="Left"/>
+            <TextBlock Text="Connections" HorizontalAlignment="Center"/>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">
@@ -40,16 +32,23 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" Margin="0,0,10,0"/>
-            <TextBox Grid.Column="1" Margin="0,0,10,0"/>
-            <Button Grid.Column="2" Content="Search" Style="{StaticResource DefaultButton}"/>
+            <TextBox Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0"/>
+            <TextBox Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}" Margin="0,0,10,0"/>
+            <Button Grid.Column="2" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}" Style="{StaticResource DefaultButton}"/>
         </Grid>
 
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,30,0,0">
-            <TextBlock Text="Current location:" Margin="0,0,5,0" VerticalAlignment="Center"/>
-            <TextBox Text="Cham" IsReadOnly="True" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
-            <Button Content="Find connection" Style="{StaticResource DefaultButton}"/>
-        </StackPanel>
+        <DataGrid Grid.Row="2" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList.ConnectionList}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Start" Binding="{Binding From.Station.Name}" />
+                <DataGridTextColumn Header="End" Binding="{Binding To.Station.Name}" />
+                <DataGridTextColumn Header="Duration" Binding="{Binding Duration, StringFormat=t}"/>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Details}" Margin="10" />
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
 
     </Grid>
 </Window>

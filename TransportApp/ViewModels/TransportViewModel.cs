@@ -1,6 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using TransportApp.Base;
 using TransportApp.Views;
+using System.Device.Location;
 
 namespace TransportApp.ViewModels
 {
@@ -8,7 +10,10 @@ namespace TransportApp.ViewModels
     {
         #region Initialization
 
-        
+        public TransportViewModel()
+        {
+
+        }
 
         #endregion
 
@@ -57,9 +62,12 @@ namespace TransportApp.ViewModels
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the current location.
+        /// </summary>
         public string CurrentLocation
         {
-            get => _currentLocation;
+            get => _currentLocation ?? (_currentLocation = "Luzern");
             set
             {
                 _currentLocation = value;
