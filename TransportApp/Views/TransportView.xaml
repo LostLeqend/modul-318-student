@@ -1,0 +1,57 @@
+﻿<Window x:Class="TransportApp.Views.TransportView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Width="1366" Height="768" 
+        MinWidth="667" MinHeight="375"
+        Title="TransportView" 
+        WindowState="Maximized" 
+        FontFamily="SegoeUI" FontSize="16">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" x:Name="BtnConnections" Content="Connections" Command="{Binding ShowConnectionsCommand}" Margin="0,0,10,0" Style="{StaticResource DefaultButton}"/>
+            <Button Grid.Column="1" x:Name="BtnStationBoard" Content="StationBoard" Command="{Binding ShowStationBoardCommand}" Margin="0,0,10,0" Style="{StaticResource DefaultButton}"/>
+            <Button Grid.Column="2" x:Name="BtnTrainStation" Content="TrainStation" Command="{Binding ShowTrainStation}" Style="{StaticResource DefaultButton}"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0" Margin="0,0,10,0"/>
+            <TextBox Grid.Column="1" Margin="0,0,10,0"/>
+            <Button Grid.Column="2" Content="Search" Style="{StaticResource DefaultButton}"/>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,30,0,0">
+            <TextBlock Text="Current location:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding CurrentLocation}" IsReadOnly="True" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
+            <Button Content="Find connection" Style="{StaticResource DefaultButton}"/>
+        </StackPanel>
+
+        <!--TODO Implement a real map https://github.com/ericnewton76/gmaps-api-net-->
+
+    </Grid>
+</Window>
