@@ -4,7 +4,7 @@ using TransportApp.Views;
 
 namespace TransportApp.ViewModels
 {
-    public class TransportViewModel
+    public class TransportViewModel : BaseViewModel
     {
         #region Initialization
 
@@ -57,7 +57,16 @@ namespace TransportApp.ViewModels
 
         #region Properties
 
-        public string CurrentLocation { get; set; }
+        public string CurrentLocation
+        {
+            get => _currentLocation;
+            set
+            {
+                _currentLocation = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string _currentLocation;
 
         #endregion
 
