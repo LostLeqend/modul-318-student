@@ -33,6 +33,20 @@ namespace TransportApp.ViewModels
 
         #endregion
 
+        #region Back to MainPage
+
+        public ICommand BackCommand => _backCommand ?? (_backCommand = new RelayCommand(OnExecuteBack));
+        private ICommand _backCommand;
+
+        private void OnExecuteBack()
+        {
+            var transportView = new TransportView();
+            RequestClose?.Invoke();
+            transportView.ShowDialog();
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties
@@ -78,6 +92,12 @@ namespace TransportApp.ViewModels
             }
         }
         private Connections _connectionList;
+        #endregion
+
+        #region Events
+
+        public event Action RequestClose;
+
         #endregion
 
         #region Methods

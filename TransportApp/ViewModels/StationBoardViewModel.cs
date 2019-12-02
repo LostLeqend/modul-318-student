@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using SwissTransport;
 using TransportApp.Base;
 using TransportApp.Views;
@@ -29,11 +30,31 @@ namespace TransportApp.ViewModels
 
         #endregion
 
+        #region Back to MainPage
+
+        public ICommand BackCommand => _backCommand ?? (_backCommand = new RelayCommand(OnExecuteBack));
+        private ICommand _backCommand;
+
+        private void OnExecuteBack()
+        {
+            var transportView = new TransportView();
+            RequestClose?.Invoke();
+            transportView.ShowDialog();
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties
 
 
+
+        #endregion
+
+        #region Events
+
+        public event Action RequestClose;
 
         #endregion
 

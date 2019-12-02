@@ -10,7 +10,9 @@
         public TransportView()
         {
             InitializeComponent();
-            DataContext = new TransportViewModel();
+            var viewModel = new TransportViewModel();
+            DataContext = viewModel;
+            viewModel.RequestClose += this.Close;
         }
     }
 }

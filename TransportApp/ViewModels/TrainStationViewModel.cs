@@ -5,11 +5,11 @@ using TransportApp.Views;
 
 namespace TransportApp.ViewModels
 {
-    public class TransportViewModel : BaseViewModel
+    public class TrainStationViewModel : BaseViewModel
     {
         #region Initialization
 
-        public TransportViewModel()
+        public TrainStationViewModel()
         {
 
         }

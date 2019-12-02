@@ -10,7 +10,9 @@
         public StationBoardView()
         {
             InitializeComponent();
-            DataContext = new StationBoardViewModel();
+            var viewModel = new StationBoardViewModel();
+            DataContext = viewModel;
+            viewModel.RequestClose += this.Close;
         }
     }
 }

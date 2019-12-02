@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0">
-            <Button Content="Back" HorizontalAlignment="Left"/>
+            <Button Content="Back" Command="{Binding BackCommand}"  HorizontalAlignment="Left"/>
             <TextBlock Text="Connections" HorizontalAlignment="Center"/>
         </Grid>
 

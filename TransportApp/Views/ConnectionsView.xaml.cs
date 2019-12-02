@@ -10,7 +10,9 @@
         public ConnectionsView()
         {
             InitializeComponent();
-            DataContext = new ConnectionsViewModel();
+            var viewModel = new ConnectionsViewModel();
+            DataContext = viewModel;
+            viewModel.RequestClose += this.Close;
         }
     }
 }

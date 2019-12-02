@@ -28,9 +28,9 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" x:Name="BtnConnections" Content="Connections" Command="{Binding ShowConnectionsCommand}" Margin="0,0,10,0" Style="{StaticResource DefaultButton}"/>
-            <Button Grid.Column="1" x:Name="BtnStationBoard" Content="StationBoard" Command="{Binding ShowStationBoardCommand}" Margin="0,0,10,0" Style="{StaticResource DefaultButton}"/>
-            <Button Grid.Column="2" x:Name="BtnTrainStation" Content="TrainStation" Command="{Binding ShowTrainStation}" Style="{StaticResource DefaultButton}"/>
+            <Button Grid.Column="0" x:Name="BtnConnections" Content="Connections" Command="{Binding ShowConnectionsCommand}" Margin="0,0,10,0" Style="{StaticResource NavigationButton}"/>
+            <Button Grid.Column="1" x:Name="BtnStationBoard" Content="StationBoard" Command="{Binding ShowStationBoardCommand}" Margin="0,0,10,0" Style="{StaticResource NavigationButton}"/>
+            <Button Grid.Column="2" x:Name="BtnTrainStation" Content="TrainStation" Command="{Binding ShowTrainStation}" Style="{StaticResource NavigationButton}"/>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">

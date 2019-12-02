@@ -64,6 +64,7 @@
     <Compile Include="Base\RelayCommand.cs" />
     <Compile Include="ViewModels\ConnectionsViewModel.cs" />
     <Compile Include="ViewModels\StationBoardViewModel.cs" />
+    <Compile Include="ViewModels\TrainStationViewModel.cs" />
     <Compile Include="ViewModels\TransportViewModel.cs" />
     <Compile Include="Views\ConnectionsView.xaml.cs">
       <DependentUpon>ConnectionsView.xaml</DependentUpon>
