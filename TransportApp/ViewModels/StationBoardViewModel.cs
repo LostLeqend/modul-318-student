@@ -21,7 +21,7 @@ namespace TransportApp.ViewModels
         public ICommand SearchTrainStationCommand => _searchTrainStationCommand ?? (_searchTrainStationCommand = new RelayCommand(OnExecuteSerchTrainStation));
         private ICommand _searchTrainStationCommand;
 
-        private void OnExecuteSerchTrainStation()
+        private void OnExecuteSerchTrainStation(object parameter)
         {
             var testStation = "Luzern";
             var transport = new Transport();
@@ -35,7 +35,7 @@ namespace TransportApp.ViewModels
         public ICommand BackCommand => _backCommand ?? (_backCommand = new RelayCommand(OnExecuteBack));
         private ICommand _backCommand;
 
-        private void OnExecuteBack()
+        private void OnExecuteBack(object parameter)
         {
             var transportView = new TransportView();
             RequestClose?.Invoke();

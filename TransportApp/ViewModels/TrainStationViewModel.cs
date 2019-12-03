@@ -23,7 +23,7 @@ namespace TransportApp.ViewModels
         public ICommand ShowConnectionsCommand =>_showConnectionsCommand ?? (_showConnectionsCommand = new RelayCommand(OnExecuteShowConnections));
         private ICommand _showConnectionsCommand;
 
-        private void OnExecuteShowConnections()
+        private void OnExecuteShowConnections(object parameter)
         {
             var connectionsView = new ConnectionsView();
             RequestClose?.Invoke();
@@ -37,7 +37,7 @@ namespace TransportApp.ViewModels
         public ICommand ShowStationBoardCommand =>_showStationBoardCommand ?? (_showStationBoardCommand = new RelayCommand(OnExecuteShowStationBoard));
         private ICommand _showStationBoardCommand;
 
-        private void OnExecuteShowStationBoard()
+        private void OnExecuteShowStationBoard(object parameter)
         {
             var stationBoardView = new StationBoardView();
             RequestClose?.Invoke();
@@ -51,7 +51,7 @@ namespace TransportApp.ViewModels
         public ICommand ShowTrainStation =>_showTrainStation ?? (_showTrainStation = new RelayCommand(OnExecuteShowTrainStation));
         private ICommand _showTrainStation;
 
-        private void OnExecuteShowTrainStation()
+        private void OnExecuteShowTrainStation(object parameter)
         {
             var trainStationView = new TrainStationView();
             RequestClose?.Invoke();

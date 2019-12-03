@@ -3,12 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Width="1366" Height="768" 
         MinWidth="667" MinHeight="375"
         Title="Connections" 
-        WindowState="Maximized" 
-        FontFamily="SegoeUI" FontSize="16">
+        WindowState="Maximized"
+        FontFamily="SegoeUI" FontSize="16"
+        Icon="../Assets/Icons/train.png">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -29,25 +31,65 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <TextBox Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0"/>
-            <TextBox Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}" Margin="0,0,10,0"/>
-            <Button Grid.Column="2" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}" Style="{StaticResource DefaultButton}"/>
+            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}"/>
+
+            <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, Converter={StaticResource BoolToVis}}" Margin="0,0,10,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding Path=CompleteStartLocationCommand}" CommandParameter="{Binding ElementName=LvCompleteStartLocation, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
+            <ListView Grid.Row="1" Grid.Column="1" x:Name="LvCompleteEndLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteEndLocationActive, Converter={StaticResource BoolToVis}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding Path=CompleteEndLocationCommand}" CommandParameter="{Binding ElementName=LvCompleteEndLocation, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
         </Grid>
 
-        <DataGrid Grid.Row="2" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList.ConnectionList}" AutoGenerateColumns="False">
+        <Grid Grid.Row="2" Grid.Column="0" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Date"/>
+            <DatePicker Grid.Row="1" Grid.Column="0" SelectedDate="{Binding Date}" Margin="0,0,20,0"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="Time"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Time, StringFormat=HH:mm}" Margin="0,0,20,0"/>
+
+            <CheckBox Grid.Row="1" Grid.Column="2" Content="Is time arrival-time" IsChecked="{Binding IsArrivalTime}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+            <Button Grid.Row="1" Grid.Column="3" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}" Style="{StaticResource DefaultButton}"/>
+        </Grid>
+
+        <DataGrid Grid.Row="3" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList.ConnectionList}" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" Margin="0,20,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Start" Binding="{Binding From.Station.Name}" />
+                <DataGridTextColumn Header="Start-Time" Binding="{Binding From.Departure, StringFormat=HH:mm}" />
+                <DataGridTextColumn Header="Platform" Binding="{Binding From.Platform}" />
                 <DataGridTextColumn Header="End" Binding="{Binding To.Station.Name}" />
-                <DataGridTextColumn Header="Duration" Binding="{Binding Duration, StringFormat=t}"/>
+                <DataGridTextColumn Header="End-Time" Binding="{Binding To.Arrival, StringFormat=HH:mm}" />
+                <DataGridTextColumn Header="Platform" Binding="{Binding To.Platform}" />
+                <DataGridTextColumn Header="Duration" Binding="{Binding Duration}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding From.Departure, StringFormat=d}"/>
             </DataGrid.Columns>
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Details}" Margin="10" />
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
         </DataGrid>
 
     </Grid>

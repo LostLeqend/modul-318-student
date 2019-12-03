@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 
@@ -8,7 +9,7 @@ namespace SwissTransport
     {
         public Stations GetStations(string query)
         {
-            query = System.Uri.EscapeDataString(query);
+            query = Uri.EscapeDataString(query);
             var request = CreateWebRequest("http://transport.opendata.ch/v1/locations?query=" + query);
             var response = request.GetResponse();
             var responseStream = response.GetResponseStream();
@@ -26,8 +27,8 @@ namespace SwissTransport
 
         public StationBoardRoot GetStationBoard(string station, string id)
         {
-            station = System.Uri.EscapeDataString(station);
-            id = System.Uri.EscapeDataString(id);
+            station = Uri.EscapeDataString(station);
+            id = Uri.EscapeDataString(id);
             var request = CreateWebRequest("http://transport.opendata.ch/v1/stationboard?station=" + station + "&id=" + id);
             var response = request.GetResponse();
             var responseStream = response.GetResponseStream();
@@ -43,11 +44,14 @@ namespace SwissTransport
             return null;
         }
 
-        public Connections GetConnections(string fromStation, string toStation)
+        public Connections GetConnections(string fromStation, string toStation, string date, string time, bool isArrivalTime)
         {
-            fromStation = System.Uri.EscapeDataString(fromStation);
-            toStation = System.Uri.EscapeDataString(toStation);
-            var request = CreateWebRequest("http://transport.opendata.ch/v1/connections?from=" + fromStation + "&to=" + toStation);
+            fromStation = Uri.EscapeDataString(fromStation);
+            toStation = Uri.EscapeDataString(toStation);
+            date = Uri.EscapeDataString(date);
+            time = Uri.EscapeDataString(time);
+
+            var request = CreateWebRequest("http://transport.opendata.ch/v1/connections?from=" + fromStation + "&to=" + toStation + "&date=" + date + "&time=" + time + "&isArrivalTime=" + Convert.ToInt32(isArrivalTime));
             var response = request.GetResponse();
             var responseStream = response.GetResponseStream();
 

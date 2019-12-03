@@ -5,12 +5,12 @@ namespace TransportApp.Base
 {
     public class RelayCommand : ICommand
     {
-        public RelayCommand(Action methodToExecute)
+        public RelayCommand(Action<object> methodToExecute)
             : this(methodToExecute, null)
         {
         }
 
-        public RelayCommand(Action methodToExecute, Func<bool> canExecuteEvaluator)
+        public RelayCommand(Action<object> methodToExecute, Func<bool> canExecuteEvaluator)
         {
             this._methodToExecute = methodToExecute;
             this._canExecuteEvaluator = canExecuteEvaluator;
@@ -22,7 +22,7 @@ namespace TransportApp.Base
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        private readonly Action _methodToExecute;
+        private readonly Action<object> _methodToExecute;
         private readonly Func<bool> _canExecuteEvaluator;
 
         public bool CanExecute(object parameter)
@@ -40,7 +40,7 @@ namespace TransportApp.Base
 
         public void Execute(object parameter)
         {
-            this._methodToExecute.Invoke();
+            this._methodToExecute.Invoke(parameter);
         }
     }
 }

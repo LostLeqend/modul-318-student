@@ -8,7 +8,8 @@
         MinWidth="667" MinHeight="375"
         Title="StationBoard" 
         WindowState="Maximized"
-        FontFamily="SegoeUI" FontSize="16">
+        FontFamily="SegoeUI" FontSize="16"
+        Icon="../Assets/Icons/train.png">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

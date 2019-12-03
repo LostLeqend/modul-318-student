@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -26,11 +27,11 @@ namespace SwissTransport
         [JsonProperty("station")]
         public Station Station { get; set; }
 
-        public string Arrival { get; set; }
+        public DateTime? Arrival { get; set; }
 
         public string ArrivalTimestamp { get; set; }
 
-        public string Departure { get; set; }
+        public DateTime? Departure { get; set; }
 
         public string DepartureTimestamp { get; set; }
 
