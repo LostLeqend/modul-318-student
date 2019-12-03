@@ -3,11 +3,48 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TransportApp.Views"
+        xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         mc:Ignorable="d"
-        Title="TrainStationView" Height="450" Width="800"
+        Width="1366" Height="768" 
+        MinWidth="667" MinHeight="375"
+        Title="TrainStation - TransportApp" 
+        WindowState="Maximized"
+        FontFamily="SegoeUI" FontSize="16"
         Icon="../Assets/Icons/train.png">
-    <Grid>
-        
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0">
+                <Image Source="../Assets/Icons/Icons.16/back.png" Height="16"/>
+            </Button>
+
+            <TextBlock Text="TrainStation" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.Column="0" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Time, StringFormat=HH:mm}" Margin="0,0,20,0"/>
+
+            <Button Grid.Row="0" Grid.Column="1" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}" Style="{StaticResource DefaultButton}"/>
+        </Grid>
+
+        <m:Map Grid.Row="3" Grid.Column="0" CredentialsProvider="AtfSrDlhVTMwel5UWFTechzhnRWXA_tbckinxagRYP7dW7VXmodcL0QwSeG5UsXd" ZoomLevel="7" Center="46, 8"/>
     </Grid>
 </Window>

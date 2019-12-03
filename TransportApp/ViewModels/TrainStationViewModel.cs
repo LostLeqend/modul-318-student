@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using Microsoft.Maps.MapControl.WPF;
 using TransportApp.Base;
 using TransportApp.Views;
 
@@ -18,44 +19,16 @@ namespace TransportApp.ViewModels
 
         #region Commands
 
-        #region Show connections
+        #region Back to MainPage
 
-        public ICommand ShowConnectionsCommand =>_showConnectionsCommand ?? (_showConnectionsCommand = new RelayCommand(OnExecuteShowConnections));
-        private ICommand _showConnectionsCommand;
+        public ICommand BackCommand => _backCommand ?? (_backCommand = new RelayCommand(OnExecuteBack));
+        private ICommand _backCommand;
 
-        private void OnExecuteShowConnections(object parameter)
+        private void OnExecuteBack(object parameter)
         {
-            var connectionsView = new ConnectionsView();
+            var transportView = new TransportView();
             RequestClose?.Invoke();
-            connectionsView.ShowDialog();
-        }
-
-        #endregion
-
-        #region Show station board
-
-        public ICommand ShowStationBoardCommand =>_showStationBoardCommand ?? (_showStationBoardCommand = new RelayCommand(OnExecuteShowStationBoard));
-        private ICommand _showStationBoardCommand;
-
-        private void OnExecuteShowStationBoard(object parameter)
-        {
-            var stationBoardView = new StationBoardView();
-            RequestClose?.Invoke();
-            stationBoardView.ShowDialog();
-        }
-
-        #endregion
-
-        #region Show train station
-
-        public ICommand ShowTrainStation =>_showTrainStation ?? (_showTrainStation = new RelayCommand(OnExecuteShowTrainStation));
-        private ICommand _showTrainStation;
-
-        private void OnExecuteShowTrainStation(object parameter)
-        {
-            var trainStationView = new TrainStationView();
-            RequestClose?.Invoke();
-            trainStationView.ShowDialog();
+            transportView.ShowDialog();
         }
 
         #endregion
@@ -64,19 +37,28 @@ namespace TransportApp.ViewModels
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets the current location.
-        /// </summary>
-        public string CurrentLocation
+        public string Station
         {
-            get => _currentLocation ?? (_currentLocation = "Luzern");
+            get => _station;
             set
             {
-                _currentLocation = value;
+                _station = value;
+                RaisePropertyChanged();
+
+            }
+        }
+        private string _station;
+
+        public Location Location
+        {
+            get => _location;
+            set
+            {
+                _location = value;
                 RaisePropertyChanged();
             }
         }
-        private string _currentLocation;
+        private Location _location = new Location(46, 8);
 
         #endregion
 

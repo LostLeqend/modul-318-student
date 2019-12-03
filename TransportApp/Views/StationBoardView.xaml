@@ -6,12 +6,13 @@
         mc:Ignorable="d"
         Width="1366" Height="768" 
         MinWidth="667" MinHeight="375"
-        Title="StationBoard" 
+        Title="StationBoard - TransportApp" 
         WindowState="Maximized"
         FontFamily="SegoeUI" FontSize="16"
         Icon="../Assets/Icons/train.png">
     <Grid Margin="20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -19,12 +20,25 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-            <TextBox Margin="0,0,20,0"/>
-            <Button Content="Search train station" Command="{Binding SearchTrainStationCommand}"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0">
+                <Image Source="../Assets/Icons/Icons.16/back.png" Height="16"/>
+            </Button>
 
-        <DataGrid Grid.Row="1" Grid.Column="0" x:Name="DgrStationBoard"  AutoGenerateColumns="False">
+            <TextBlock Text="Connections" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0" x:Name="TxtStation" Text="{Binding Station}" Margin="0,0,20,0"/>
+            <Button Grid.Column="1" Content="Search train station" Command="{Binding SearchTrainStationCommand}" Style="{StaticResource DefaultButton}"/>
+        </Grid>
+
+        <DataGrid Grid.Row="2" Grid.Column="0" x:Name="DgrStationBoard" AutoGenerateColumns="False" Margin="0,20,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Birthday" Binding="{Binding Birthday}" />

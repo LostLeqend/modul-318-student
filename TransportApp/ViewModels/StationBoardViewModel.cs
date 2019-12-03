@@ -16,15 +16,15 @@ namespace TransportApp.ViewModels
 
         #region Commands
 
-        #region Show connections
+        #region Show StationBoard
 
-        public ICommand SearchTrainStationCommand => _searchTrainStationCommand ?? (_searchTrainStationCommand = new RelayCommand(OnExecuteSerchTrainStation));
+        public ICommand SearchTrainStationCommand => _searchTrainStationCommand ?? (_searchTrainStationCommand = new RelayCommand(OnExecuteSearchTrainStation));
         private ICommand _searchTrainStationCommand;
 
-        private void OnExecuteSerchTrainStation(object parameter)
+        private void OnExecuteSearchTrainStation(object parameter)
         {
-            var testStation = "Luzern";
             var transport = new Transport();
+            Station = transport.GetStations("luzern")
             var stationBoard = transport.GetStationBoard(testStation, "0");
         }
 
@@ -48,7 +48,7 @@ namespace TransportApp.ViewModels
 
         #region Properties
 
-
+        public Station Station { get; set; }
 
         #endregion
 

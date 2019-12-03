@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Width="1366" Height="768" 
         MinWidth="667" MinHeight="375"
-        Title="Connections" 
+        Title="Connections - TransportApp" 
         WindowState="Maximized"
         FontFamily="SegoeUI" FontSize="16"
         Icon="../Assets/Icons/train.png">
@@ -23,8 +23,11 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0">
-            <Button Content="Back" Command="{Binding BackCommand}"  HorizontalAlignment="Left"/>
-            <TextBlock Text="Connections" HorizontalAlignment="Center"/>
+            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0">
+                <Image Source="../Assets/Icons/Icons.16/back.png" Height="16"/>
+            </Button>
+
+            <TextBlock Text="StationBoard" HorizontalAlignment="Center"/>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">
