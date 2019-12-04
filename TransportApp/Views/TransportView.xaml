@@ -83,7 +83,7 @@
             </ListView>
         </Grid>
 
-        <DataGrid Grid.Row="3" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList.ConnectionList}" AutoGenerateColumns="False" 
+        <DataGrid Grid.Row="3" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList}" AutoGenerateColumns="False" 
                   SelectionMode="Single" IsReadOnly="True" Margin="0,20,0,0" TabIndex="6">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Start" Binding="{Binding From.Station.Name}" />

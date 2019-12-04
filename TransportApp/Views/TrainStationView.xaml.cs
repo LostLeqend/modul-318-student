@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,16 +36,17 @@ namespace TransportApp.Views
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             var transport = new Transport();
-            var station = transport.GetStations(TxtStation.Text).StationList.FirstOrDefault(x => Equals(x.Name, TxtStation.Text));
+            var station = transport.GetStations(TxtStation.Text).StationList.FirstOrDefault(x => string.Equals(x.Name, TxtStation.Text, StringComparison.CurrentCultureIgnoreCase));
             if (station != null)
             {
                 Map.Center = new Location(station.Coordinate.XCoordinate, station.Coordinate.YCoordinate);
                 Map.ZoomLevel = 17;
                 Map.Mode = new AerialMode();
+                TxtStation.Text = string.Empty;
             }
             else
             {
-                MessageBox.Show("Location doesn't exist");
+                MessageBox.Show("Station can not be found. Please check if the name is correct.");
                 Map.Center = new Location(46,8);
                 Map.ZoomLevel = 7;
                 Map.Mode = new RoadMode();

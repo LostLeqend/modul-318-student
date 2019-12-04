@@ -33,8 +33,10 @@ namespace TransportApp.ViewModels
             {
                 var transport = new Transport();
                 var stationId = transport.GetStations(Station).StationList.FirstOrDefault(x => string.Equals(x.Name, Station, StringComparison.CurrentCultureIgnoreCase))?.Id;
+                
                 if (stationId == null)
-                    throw new Exception("This station does not exist.");
+                    throw new Exception("Station can not be found. Please check if the name is correct.");
+
                 StationBoards = transport.GetStationBoard(Station, stationId).Entries;
             }
             catch (Exception exception)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -59,7 +60,7 @@ namespace TransportApp.ViewModels
 
         #endregion
 
-        #region Complete StartLocation
+        #region Quick connection search
 
         public ICommand QuickConnectionSearchCommand => _quickConnectionSearchCommand ?? (_quickConnectionSearchCommand = new RelayCommand(OnExecuteQuickConnectionSearch));
         private ICommand _quickConnectionSearchCommand;
@@ -75,10 +76,13 @@ namespace TransportApp.ViewModels
                 var time = DateTime.Now.ToShortTimeString();
 
                 var transport = new Transport();
-                ConnectionList = transport.GetConnections(StartLocation, EndLocation, date, time, false);
+                ConnectionList = transport.GetConnections(StartLocation, EndLocation, date, time, false).ConnectionList;
 
-                //Format datetime manual, because it's from the type string
-                foreach (var connection in ConnectionList.ConnectionList)
+                if(ConnectionList.Count == 0)
+                    throw new Exception("No connection found.\rPlease check if the Station names are correct.");
+
+                //Format duration manual, because it's from the type string and cannot be convert to DateTime.
+                foreach (var connection in ConnectionList)
                 {
                     connection.Duration = connection.Duration.Remove(0, 3);
                     connection.Duration = connection.Duration.Remove(connection.Duration.Length - 3, 3);
@@ -192,7 +196,7 @@ namespace TransportApp.ViewModels
         /// <summary>
         /// Gets or sets the connections.
         /// </summary>
-        public Connections ConnectionList
+        public List<Connection> ConnectionList
         {
             get => _connectionList;
             set
@@ -201,7 +205,7 @@ namespace TransportApp.ViewModels
                 RaisePropertyChanged();
             }
         }
-        private Connections _connectionList;
+        private List<Connection> _connectionList;
 
         /// <summary>
         /// Gets or sets a list of stations for the autocomplete function.
