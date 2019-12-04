@@ -93,7 +93,7 @@
                 <DataGridTextColumn Header="End-Time" Binding="{Binding To.Arrival, StringFormat=HH:mm}" />
                 <DataGridTextColumn Header="Platform" Binding="{Binding To.Platform}" />
                 <DataGridTextColumn Header="Duration" Binding="{Binding Duration}"/>
-                <DataGridTextColumn Header="Date" Binding="{Binding From.Departure, StringFormat=d}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding From.Departure, StringFormat=dd.MM.yyyy}"/>
             </DataGrid.Columns>
         </DataGrid>
 

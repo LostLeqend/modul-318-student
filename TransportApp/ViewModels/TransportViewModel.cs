@@ -96,8 +96,10 @@ namespace TransportApp.ViewModels
                     {
                         connection.Duration += " h";
                     }
-
                 }
+
+                StartLocation = string.Empty;
+                EndLocation = string.Empty;
             }
             catch (Exception exception)
             {
