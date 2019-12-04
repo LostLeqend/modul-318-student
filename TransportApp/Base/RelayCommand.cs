@@ -5,12 +5,7 @@ namespace TransportApp.Base
 {
     public class RelayCommand : ICommand
     {
-        public RelayCommand(Action<object> methodToExecute)
-            : this(methodToExecute, null)
-        {
-        }
-
-        public RelayCommand(Action<object> methodToExecute, Func<bool> canExecuteEvaluator)
+        public RelayCommand(Action<object> methodToExecute, Func<bool> canExecuteEvaluator = null)
         {
             this._methodToExecute = methodToExecute;
             this._canExecuteEvaluator = canExecuteEvaluator;

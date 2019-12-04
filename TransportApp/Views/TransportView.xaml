@@ -31,12 +31,14 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" x:Name="BtnConnections" Content="Connections" Command="{Binding ShowConnectionsCommand}" Margin="0,0,10,0" Style="{StaticResource NavigationButton}"/>
-            <Button Grid.Column="1" x:Name="BtnStationBoard" Content="StationBoard" Command="{Binding ShowStationBoardCommand}" Margin="0,0,10,0" Style="{StaticResource NavigationButton}"/>
-            <Button Grid.Column="2" x:Name="BtnTrainStation" Content="TrainStation" Command="{Binding ShowTrainStation}" Style="{StaticResource NavigationButton}"/>
+            <Button Grid.Column="0" x:Name="BtnConnections" Content="Connections" Command="{Binding ShowConnectionsCommand}" Margin="0,0,10,0" Style="{StaticResource NavigationButton}" TabIndex="0"/>
+            <Button Grid.Column="1" x:Name="BtnStationBoard" Content="StationBoard" Command="{Binding ShowStationBoardCommand}" Margin="0,0,10,0" Style="{StaticResource NavigationButton}" TabIndex="1"/>
+            <Button Grid.Column="2" x:Name="BtnTrainStation" Content="TrainStation" Command="{Binding ShowTrainStation}" Style="{StaticResource NavigationButton}" TabIndex="2"/>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">
+        <Label Grid.Row="1" Grid.Column="0" Content="Quick search" FontStyle="Italic" Margin="0,20,0,0" />
+
+        <Grid Grid.Row="2" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -47,33 +49,53 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="From" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}" Margin="0,0,10,0" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="To" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-            <Button Grid.Row="0" Grid.Column="2" Content="Search"/>
-
-            <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, Converter={StaticResource BoolToVis}}" Margin="0,0,10,0">
+            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" LostKeyboardFocus="LostFocusOnLocation"
+                     materialDesign:HintAssist.Hint="From" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TabIndex="3">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding LostFocusOnLocationCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" LostKeyboardFocus="LostFocusOnLocation"
+                     materialDesign:HintAssist.Hint="To" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TabIndex="4">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding LostFocusOnLocationCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            <Button Grid.Row="0" Grid.Column="2" x:Name="BtnSearch" Content="Search" Command="{Binding QuickConnectionSearchCommand}" TabIndex="5"/>
+
+            <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" IsTabStop="False" Margin="0,0,10,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding Path=CompleteStartLocationCommand}" CommandParameter="{Binding ElementName=LvCompleteStartLocation, Path=SelectedItem}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
-            <ListView Grid.Row="1" Grid.Column="1" x:Name="LvCompleteEndLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteEndLocationActive, Converter={StaticResource BoolToVis}}">
+            <ListView Grid.Row="1" Grid.Column="1" x:Name="LvCompleteEndLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteEndLocationActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" IsTabStop="False">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding Path=CompleteEndLocationCommand}" CommandParameter="{Binding ElementName=LvCompleteEndLocation, Path=SelectedItem}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
         </Grid>
 
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,30,0,0">
-            <TextBlock Text="Current location:" Margin="0,0,5,0" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding CurrentLocation}" IsReadOnly="True" Margin="0,0,20,0" VerticalContentAlignment="Center" BorderThickness="0"/>
-            <Button Content="Find connection" Visibility="Collapsed"/>
-        </StackPanel>
-
-        <!--TODO Implement a real map https://github.com/ericnewton76/gmaps-api-net-->
+        <DataGrid Grid.Row="3" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList.ConnectionList}" AutoGenerateColumns="False" 
+                  SelectionMode="Single" IsReadOnly="True" Margin="0,20,0,0" TabIndex="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Start" Binding="{Binding From.Station.Name}" />
+                <DataGridTextColumn Header="Start-Time" Binding="{Binding From.Departure, StringFormat=HH:mm}" />
+                <DataGridTextColumn Header="Platform" Binding="{Binding From.Platform}" />
+                <DataGridTextColumn Header="End" Binding="{Binding To.Station.Name}" />
+                <DataGridTextColumn Header="End-Time" Binding="{Binding To.Arrival, StringFormat=HH:mm}" />
+                <DataGridTextColumn Header="Platform" Binding="{Binding To.Platform}" />
+                <DataGridTextColumn Header="Duration" Binding="{Binding Duration}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding From.Departure, StringFormat=d}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using SwissTransport;
 using TransportApp.Base;
@@ -18,7 +19,7 @@ namespace TransportApp.ViewModels
 
         #region Show connections
 
-        public ICommand ShowConnectionsCommand =>_showConnectionsCommand ?? (_showConnectionsCommand = new RelayCommand(OnExecuteShowConnections));
+        public ICommand ShowConnectionsCommand => _showConnectionsCommand ?? (_showConnectionsCommand = new RelayCommand(OnExecuteShowConnections));
         private ICommand _showConnectionsCommand;
 
         private void OnExecuteShowConnections(object parameter)
@@ -32,7 +33,7 @@ namespace TransportApp.ViewModels
 
         #region Show station board
 
-        public ICommand ShowStationBoardCommand =>_showStationBoardCommand ?? (_showStationBoardCommand = new RelayCommand(OnExecuteShowStationBoard));
+        public ICommand ShowStationBoardCommand => _showStationBoardCommand ?? (_showStationBoardCommand = new RelayCommand(OnExecuteShowStationBoard));
         private ICommand _showStationBoardCommand;
 
         private void OnExecuteShowStationBoard(object parameter)
@@ -46,7 +47,7 @@ namespace TransportApp.ViewModels
 
         #region Show train station
 
-        public ICommand ShowTrainStation =>_showTrainStation ?? (_showTrainStation = new RelayCommand(OnExecuteShowTrainStation));
+        public ICommand ShowTrainStation => _showTrainStation ?? (_showTrainStation = new RelayCommand(OnExecuteShowTrainStation));
         private ICommand _showTrainStation;
 
         private void OnExecuteShowTrainStation(object parameter)
@@ -54,6 +55,50 @@ namespace TransportApp.ViewModels
             var trainStationView = new TrainStationView();
             RequestClose?.Invoke();
             trainStationView.ShowDialog();
+        }
+
+        #endregion
+
+        #region Complete StartLocation
+
+        public ICommand QuickConnectionSearchCommand => _quickConnectionSearchCommand ?? (_quickConnectionSearchCommand = new RelayCommand(OnExecuteQuickConnectionSearch));
+        private ICommand _quickConnectionSearchCommand;
+
+        private void OnExecuteQuickConnectionSearch(object parameter)
+        {
+            if (!IsStationValid())
+                return;
+
+            try
+            {
+                var date = DateTime.Now.ToShortDateString();
+                var time = DateTime.Now.ToShortTimeString();
+
+                var transport = new Transport();
+                ConnectionList = transport.GetConnections(StartLocation, EndLocation, date, time, false);
+
+                //Format datetime manual, because it's from the type string
+                foreach (var connection in ConnectionList.ConnectionList)
+                {
+                    connection.Duration = connection.Duration.Remove(0, 3);
+                    connection.Duration = connection.Duration.Remove(connection.Duration.Length - 3, 3);
+
+                    if (connection.Duration.StartsWith("00:"))
+                    {
+                        connection.Duration = connection.Duration.Remove(0, 3);
+                        connection.Duration += " min";
+                    }
+                    else
+                    {
+                        connection.Duration += " h";
+                    }
+
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
         }
 
         #endregion
@@ -92,25 +137,28 @@ namespace TransportApp.ViewModels
 
         #endregion
 
+        #region Lost Focus on Location
+
+        public ICommand LostFocusOnLocationCommand => _lostFocusOnLocationCommand ?? (_lostFocusOnLocationCommand = new RelayCommand(OnExecuteLostFocusOnLocation));
+        private ICommand _lostFocusOnLocationCommand;
+
+        private void OnExecuteLostFocusOnLocation(object parameter)
+        {
+            if(NewFocusElementIsListViewItem)
+                return;
+
+            StationList = null;
+            IsCompleteStartLocationActive = false;
+            IsCompleteEndLocationActive = false;
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets the current location.
-        /// </summary>
-        public string CurrentLocation
-        {
-            get => _currentLocation ?? (_currentLocation = "Luzern");
-            set
-            {
-                _currentLocation = value;
-                RaisePropertyChanged();
-            }
-        }
-        private string _currentLocation;
 
-        
         /// <summary>
         /// Gets or sets the start location.
         /// </summary>
@@ -120,15 +168,7 @@ namespace TransportApp.ViewModels
             set
             {
                 _startLocation = value;
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    GetStations(value);
-                    if(StationList.StationList.Any())
-                        IsCompleteStartLocationActive = true;
-                }
-                else
-                    IsCompleteStartLocationActive = false;
-
+                AutoCompleteStartLocation(value);
                 RaisePropertyChanged();
             }
         }
@@ -143,19 +183,25 @@ namespace TransportApp.ViewModels
             set
             {
                 _endLocation = value;
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    GetStations(value);
-                    if(StationList.StationList.Any())
-                        IsCompleteEndLocationActive = true;
-                }
-                else
-                    IsCompleteEndLocationActive = false;
-
+                AutoCompleteEndLocation(value);
                 RaisePropertyChanged();
             }
         }
         private string _endLocation;
+
+        /// <summary>
+        /// Gets or sets the connections.
+        /// </summary>
+        public Connections ConnectionList
+        {
+            get => _connectionList;
+            set
+            {
+                _connectionList = value;
+                RaisePropertyChanged();
+            }
+        }
+        private Connections _connectionList;
 
         /// <summary>
         /// Gets or sets a list of stations for the autocomplete function.
@@ -201,6 +247,11 @@ namespace TransportApp.ViewModels
             }
         }
         private bool _isCompleteEndLocationActive;
+
+        /// <summary>
+        /// True if new focus element is ListViewItem.
+        /// </summary>
+        public static bool NewFocusElementIsListViewItem { get; set; }
         #endregion
 
         #region Events
@@ -212,6 +263,19 @@ namespace TransportApp.ViewModels
         #region Methods
 
         /// <summary>
+        /// Determines whether [is station valid].
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if [is station valid]; otherwise, <c>false</c>.
+        /// </returns>
+        private bool IsStationValid()
+        {
+            if (string.IsNullOrWhiteSpace(StartLocation) || string.IsNullOrWhiteSpace(EndLocation))
+                return false;
+            return true;
+        }
+
+        /// <summary>
         /// Gets the stations.
         /// </summary>
         /// <param name="stationName">Name of the station.</param>
@@ -221,6 +285,42 @@ namespace TransportApp.ViewModels
             StationList = transport.GetStations(stationName);
         }
 
+        /// <summary>
+        /// Automatics the complete start location.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void AutoCompleteStartLocation(string value)
+        {
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                StationList = null;
+                GetStations(value);
+                if (StationList.StationList.Any())
+                    IsCompleteStartLocationActive = true;
+                IsCompleteEndLocationActive = false;
+            }
+            else
+                IsCompleteStartLocationActive = false;
+        }
+
+        /// <summary>
+        /// Automatics the complete end location.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void AutoCompleteEndLocation(string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                StationList = null;
+                GetStations(value);
+                if (StationList.StationList.Any())
+                    IsCompleteEndLocationActive = true;
+                IsCompleteStartLocationActive = false;
+            }
+            else
+                IsCompleteEndLocationActive = false;
+        }
         #endregion
     }
 }

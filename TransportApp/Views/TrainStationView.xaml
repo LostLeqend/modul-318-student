@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Width="1366" Height="768" 
         MinWidth="667" MinHeight="375"
@@ -41,11 +42,26 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Station}" Margin="0,0,20,0" materialDesign:HintAssist.Hint="Location" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStation" Text="{Binding Station, UpdateSourceTrigger=PropertyChanged}" LostKeyboardFocus="LostFocusOnLocation" 
+                     materialDesign:HintAssist.Hint="To" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TabIndex="0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding LostFocusOnLocationCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            <Button Grid.Row="0" Grid.Column="1" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}" TabIndex="1"/>
 
-            <Button Grid.Row="0" Grid.Column="1" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}"/>
+            <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" IsTabStop="False" Margin="0,0,10,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=CompleteStartLocationCommand}" CommandParameter="{Binding ElementName=LvCompleteStartLocation, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
         </Grid>
 
-        <m:Map Grid.Row="3" Grid.Column="0" CredentialsProvider="AtfSrDlhVTMwel5UWFTechzhnRWXA_tbckinxagRYP7dW7VXmodcL0QwSeG5UsXd" ZoomLevel="7" Center="46, 8" Margin="0,20,0,0"/>
+        <m:Map Grid.Row="3" Grid.Column="0" CredentialsProvider="AtfSrDlhVTMwel5UWFTechzhnRWXA_tbckinxagRYP7dW7VXmodcL0QwSeG5UsXd" 
+               ZoomLevel="7" Center="46, 8" Margin="0,20,0,0" TabIndex="2"/>
     </Grid>
 </Window>

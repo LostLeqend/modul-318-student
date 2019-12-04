@@ -59,6 +59,39 @@ namespace TransportApp.ViewModels
 
         #endregion
 
+        #region Complete Location
+
+        public ICommand CompleteEndLocationCommand => _completeEndLocationCommand ?? (_completeEndLocationCommand = new RelayCommand(OnExecuteCompleteEndLocation));
+        private ICommand _completeEndLocationCommand;
+
+        private void OnExecuteCompleteEndLocation(object parameter)
+        {
+            if (!(parameter is Station station))
+                return;
+
+            Station = station.Name;
+            StationList = null;
+            IsCompleteStationActive = false;
+        }
+
+        #endregion
+
+        #region Lost Focus on Location
+
+        public ICommand LostFocusOnLocationCommand => _lostFocusOnLocationCommand ?? (_lostFocusOnLocationCommand = new RelayCommand(OnExecuteLostFocusOnLocation));
+        private ICommand _lostFocusOnLocationCommand;
+
+        private void OnExecuteLostFocusOnLocation(object parameter)
+        {
+            if(NewFocusElementIsListViewItem)
+                return;
+
+            StationList = null;
+            IsCompleteStationActive = false;
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties
@@ -79,6 +112,20 @@ namespace TransportApp.ViewModels
         private string _station;
 
         /// <summary>
+        /// Gets or sets a list of stations for the autocomplete function.
+        /// </summary>
+        public Stations StationList
+        {
+            get => _stationList;
+            set
+            {
+                _stationList = value;
+                RaisePropertyChanged();
+            }
+        }
+        private Stations _stationList;
+
+        /// <summary>
         /// Gets or sets the station boards.
         /// </summary>
         public List<StationBoard> StationBoards
@@ -92,6 +139,27 @@ namespace TransportApp.ViewModels
         }
         private List<StationBoard> _stationBoards;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is auto complete station active.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is complete start location active; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsCompleteStationActive
+        {
+            get => _isCompleteStationActive;
+            set
+            {
+                _isCompleteStationActive = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _isCompleteStationActive;
+
+        /// <summary>
+        /// True if new focus element is ListViewItem.
+        /// </summary>
+        public static bool NewFocusElementIsListViewItem { get; set; }
         #endregion
 
         #region Events

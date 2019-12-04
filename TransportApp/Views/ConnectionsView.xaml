@@ -24,7 +24,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0">
-            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignIconButton}">
+            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignIconButton}" TabIndex="7">
                 <Image Source="../Assets/Icons/Icons.16/back.png" Height="16"/>
             </Button>
 
@@ -41,19 +41,33 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0" materialDesign:HintAssist.Hint="From" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}" materialDesign:HintAssist.Hint="To" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-
-            <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, Converter={StaticResource BoolToVis}}" Margin="0,0,10,0">
+            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" LostKeyboardFocus="LostFocusOnLocation" TabIndex="0"
+                     materialDesign:HintAssist.Hint="From" Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding LostFocusOnLocationCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation, UpdateSourceTrigger=PropertyChanged}" LostKeyboardFocus="LostFocusOnLocation" TabIndex="1"
+                     materialDesign:HintAssist.Hint="To" Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding LostFocusOnLocationCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+
+            <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" IsTabStop="False" Margin="0,0,10,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding Path=CompleteStartLocationCommand}" CommandParameter="{Binding ElementName=LvCompleteStartLocation, Path=SelectedItem}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>
-            <ListView Grid.Row="1" Grid.Column="1" x:Name="LvCompleteEndLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteEndLocationActive, Converter={StaticResource BoolToVis}}">
+            <ListView Grid.Row="1" Grid.Column="1" x:Name="LvCompleteEndLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteEndLocationActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" IsTabStop="False">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding Path=CompleteEndLocationCommand}" CommandParameter="{Binding ElementName=LvCompleteEndLocation, Path=SelectedItem}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
@@ -73,17 +87,18 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Date"/>
-            <DatePicker Grid.Row="1" Grid.Column="0" SelectedDate="{Binding Date}" Margin="0,0,20,0"/>
+            <DatePicker Grid.Row="1" Grid.Column="0" SelectedDate="{Binding Date}" Margin="0,0,20,0" TabIndex="2"/>
 
             <TextBlock Grid.Row="0" Grid.Column="1" Text="Time"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Time, StringFormat=HH:mm}" Margin="0,0,20,0"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Time, StringFormat=HH:mm}" Margin="0,0,20,0" TabIndex="3"/>
 
-            <CheckBox Grid.Row="1" Grid.Column="2" Content="Is time arrival-time" IsChecked="{Binding IsArrivalTime}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <CheckBox Grid.Row="1" Grid.Column="2" Content="Is time arrival-time" IsChecked="{Binding IsArrivalTime}" VerticalAlignment="Center" Margin="0,0,20,0" TabIndex="4"/>
 
-            <Button Grid.Row="1" Grid.Column="3" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}"/>
+            <Button Grid.Row="1" Grid.Column="3" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}" TabIndex="5"/>
         </Grid>
 
-        <DataGrid Grid.Row="3" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList.ConnectionList}" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" Margin="0,20,0,0">
+        <DataGrid Grid.Row="3" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList.ConnectionList}" AutoGenerateColumns="False" 
+                  SelectionMode="Single" IsReadOnly="True" Margin="0,20,0,0" TabIndex="6">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Start" Binding="{Binding From.Station.Name}" />
                 <DataGridTextColumn Header="Start-Time" Binding="{Binding From.Departure, StringFormat=HH:mm}" />

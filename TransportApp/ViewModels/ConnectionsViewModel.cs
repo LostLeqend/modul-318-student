@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -59,7 +58,6 @@ namespace TransportApp.ViewModels
             {
                 MessageBox.Show(exception.Message);
             }
-
         }
 
         #endregion
@@ -112,6 +110,23 @@ namespace TransportApp.ViewModels
 
         #endregion
 
+        #region Lost Focus on Location
+
+        public ICommand LostFocusOnLocationCommand => _lostFocusOnLocationCommand ?? (_lostFocusOnLocationCommand = new RelayCommand(OnExecuteLostFocusOnLocation));
+        private ICommand _lostFocusOnLocationCommand;
+
+        private void OnExecuteLostFocusOnLocation(object parameter)
+        {
+            if(NewFocusElementIsListViewItem)
+                return;
+
+            StationList = null;
+            IsCompleteStartLocationActive = false;
+            IsCompleteEndLocationActive = false;
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties
@@ -125,15 +140,7 @@ namespace TransportApp.ViewModels
             set
             {
                 _startLocation = value;
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    GetStations(value);
-                    if(StationList.StationList.Any())
-                        IsCompleteStartLocationActive = true;
-                }
-                else
-                    IsCompleteStartLocationActive = false;
-
+                AutoCompleteStartLocation(value);
                 RaisePropertyChanged();
             }
         }
@@ -148,15 +155,7 @@ namespace TransportApp.ViewModels
             set
             {
                 _endLocation = value;
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    GetStations(value);
-                    if(StationList.StationList.Any())
-                        IsCompleteEndLocationActive = true;
-                }
-                else
-                    IsCompleteEndLocationActive = false;
-
+                AutoCompleteEndLocation(value);
                 RaisePropertyChanged();
             }
         }
@@ -264,6 +263,10 @@ namespace TransportApp.ViewModels
         }
         private bool _isCompleteEndLocationActive;
 
+        /// <summary>
+        /// True if new focus element is ListViewItem.
+        /// </summary>
+        public static bool NewFocusElementIsListViewItem { get; set; }
         #endregion 
 
         #region Events
@@ -295,6 +298,43 @@ namespace TransportApp.ViewModels
         {
             var transport = new Transport();
             StationList = transport.GetStations(stationName);
+        }
+
+        /// <summary>
+        /// Automatics the complete start location.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void AutoCompleteStartLocation(string value)
+        {
+                            
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                StationList = null;
+                GetStations(value);
+                if(StationList.StationList.Any())
+                    IsCompleteStartLocationActive = true;
+                IsCompleteEndLocationActive = false;
+            }
+            else
+                IsCompleteStartLocationActive = false;
+        }
+
+        /// <summary>
+        /// Automatics the complete end location.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void AutoCompleteEndLocation(string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                StationList = null;
+                GetStations(value);
+                if(StationList.StationList.Any())
+                    IsCompleteEndLocationActive = true;
+                IsCompleteStartLocationActive = false;
+            }
+            else
+                IsCompleteEndLocationActive = false;
         }
         #endregion
     }
