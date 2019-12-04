@@ -43,19 +43,19 @@
             </Grid.RowDefinitions>
 
             <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStation" Text="{Binding Station, UpdateSourceTrigger=PropertyChanged}" LostKeyboardFocus="LostFocusOnLocation" 
-                     materialDesign:HintAssist.Hint="To" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TabIndex="0">
+                     materialDesign:HintAssist.Hint="Station" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,0,10,0" TabIndex="0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="LostFocus">
-                        <i:InvokeCommandAction Command="{Binding LostFocusOnLocationCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding LostFocusOnStationCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Button Grid.Row="0" Grid.Column="1" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}" TabIndex="1"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="Search train station" Command="{Binding SearchTrainStationCommand}" TabIndex="1"/>
 
-            <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" IsTabStop="False" Margin="0,0,10,0">
+            <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteEndLocationActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" IsTabStop="False">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding Path=CompleteStartLocationCommand}" CommandParameter="{Binding ElementName=LvCompleteStartLocation, Path=SelectedItem}"/>
+                        <i:InvokeCommandAction Command="{Binding Path=CompleteStationCommand}" CommandParameter="{Binding ElementName=LvCompleteStation, Path=SelectedItem}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListView>

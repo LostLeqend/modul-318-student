@@ -61,8 +61,8 @@ namespace TransportApp.ViewModels
 
         #region Complete Location
 
-        public ICommand CompleteEndLocationCommand => _completeEndLocationCommand ?? (_completeEndLocationCommand = new RelayCommand(OnExecuteCompleteEndLocation));
-        private ICommand _completeEndLocationCommand;
+        public ICommand CompleteStationCommand => _completeStationCommand ?? (_completeStationCommand = new RelayCommand(OnExecuteCompleteEndLocation));
+        private ICommand _completeStationCommand;
 
         private void OnExecuteCompleteEndLocation(object parameter)
         {
@@ -78,10 +78,10 @@ namespace TransportApp.ViewModels
 
         #region Lost Focus on Location
 
-        public ICommand LostFocusOnLocationCommand => _lostFocusOnLocationCommand ?? (_lostFocusOnLocationCommand = new RelayCommand(OnExecuteLostFocusOnLocation));
-        private ICommand _lostFocusOnLocationCommand;
+        public ICommand LostFocusOnStationCommand => _lostFocusOnStationCommand ?? (_lostFocusOnStationCommand = new RelayCommand(OnExecuteLostFocusOnStation));
+        private ICommand _lostFocusOnStationCommand;
 
-        private void OnExecuteLostFocusOnLocation(object parameter)
+        private void OnExecuteLostFocusOnStation(object parameter)
         {
             if(NewFocusElementIsListViewItem)
                 return;
@@ -105,6 +105,7 @@ namespace TransportApp.ViewModels
             set
             {
                 _station = value;
+                AutoCompleteStation(value);
                 RaisePropertyChanged();
             }
         }
@@ -170,7 +171,33 @@ namespace TransportApp.ViewModels
 
         #region Methods
 
+        /// <summary>
+        /// Gets the stations.
+        /// </summary>
+        /// <param name="stationName">Name of the station.</param>
+        private void GetStations(string stationName)
+        {
+            var transport = new Transport();
+            StationList = transport.GetStations(stationName);
+        }
 
+        /// <summary>
+        /// Automatics the complete station.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void AutoCompleteStation(string value)
+        {
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                StationList = null;
+                GetStations(value);
+                if (StationList.StationList.Any())
+                    IsCompleteStationActive = true;
+            }
+            else
+                IsCompleteStationActive = false;
+        }
 
         #endregion
     }

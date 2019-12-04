@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Input;
 using Microsoft.Maps.MapControl.WPF;
 using SwissTransport;
@@ -27,33 +28,45 @@ namespace TransportApp.ViewModels
 
         #region Complete Location
 
-        public ICommand CompleteLocationCommand => _completeLocationCommand ?? (_completeLocationCommand = new RelayCommand(OnExecuteCompleteLocation));
-        private ICommand _completeLocationCommand;
+        public ICommand CompleteStationCommand => _completeStationCommand ?? (_completeStationCommand = new RelayCommand(OnExecuteCompleteEndLocation));
+        private ICommand _completeStationCommand;
 
-        private void OnExecuteCompleteLocation(object parameter)
+        private void OnExecuteCompleteEndLocation(object parameter)
         {
             if (!(parameter is Station station))
                 return;
 
             Station = station.Name;
             StationList = null;
-            IsCompleteLocationActive = false;
+            IsCompleteStationActive = false;
         }
 
         #endregion
 
         #region Lost Focus on Location
 
-        public ICommand LostFocusOnLocationCommand => _lostFocusOnLocationCommand ?? (_lostFocusOnLocationCommand = new RelayCommand(OnExecuteLostFocusOnLocation));
-        private ICommand _lostFocusOnLocationCommand;
+        public ICommand LostFocusOnStationCommand => _lostFocusOnStationCommand ?? (_lostFocusOnStationCommand = new RelayCommand(OnExecuteLostFocusOnStation));
+        private ICommand _lostFocusOnStationCommand;
 
-        private void OnExecuteLostFocusOnLocation(object parameter)
+        private void OnExecuteLostFocusOnStation(object parameter)
         {
             if(NewFocusElementIsListViewItem)
                 return;
 
             StationList = null;
-            IsCompleteLocationActive = false;
+            IsCompleteStationActive = false;
+        }
+
+        #endregion
+
+        #region Search Location
+
+        public ICommand SearchLocationCommand => _searchLocationCommand ?? (_searchLocationCommand = new RelayCommand(OnExecuteSearchLocation));
+        private ICommand _searchLocationCommand;
+
+        private void OnExecuteSearchLocation(object parameter)
+        {
+
         }
 
         #endregion
@@ -68,6 +81,7 @@ namespace TransportApp.ViewModels
             set
             {
                 _station = value;
+                AutoCompleteStation(value);
                 RaisePropertyChanged();
 
             }
@@ -100,21 +114,22 @@ namespace TransportApp.ViewModels
         private Location _location = new Location(46, 8);
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is auto complete start-location active.
+        /// Gets or sets a value indicating whether this instance is auto complete station active.
         /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is complete start location active; otherwise, <c>false</c>.
         /// </value>
-        public bool IsCompleteLocationActive
+        public bool IsCompleteStationActive
         {
-            get => _isCompleteLocationActive;
+            get => _isCompleteStationActive;
             set
             {
-                _isCompleteLocationActive = value;
+                _isCompleteStationActive = value;
                 RaisePropertyChanged();
             }
         }
-        private bool _isCompleteLocationActive;
+        private bool _isCompleteStationActive;
+
 
         /// <summary>
         /// True if new focus element is ListViewItem.
@@ -130,7 +145,34 @@ namespace TransportApp.ViewModels
 
         #region Methods
 
+        
+        /// <summary>
+        /// Gets the stations.
+        /// </summary>
+        /// <param name="stationName">Name of the station.</param>
+        private void GetStations(string stationName)
+        {
+            var transport = new Transport();
+            StationList = transport.GetStations(stationName);
+        }
 
+        /// <summary>
+        /// Automatics the complete station.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private void AutoCompleteStation(string value)
+        {
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                StationList = null;
+                GetStations(value);
+                if (StationList.StationList.Any())
+                    IsCompleteStationActive = true;
+            }
+            else
+                IsCompleteStationActive = false;
+        }
 
         #endregion
     }
