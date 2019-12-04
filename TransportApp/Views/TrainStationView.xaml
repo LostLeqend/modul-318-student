@@ -50,7 +50,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Button Grid.Row="0" Grid.Column="1" Content="Search train station" Command="{Binding SearchTrainStationCommand}" TabIndex="1"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="Search train station" Command="{Binding SearchLocationCommand}" Click="ButtonBase_OnClick" TabIndex="1"/>
 
             <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteEndLocationActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" IsTabStop="False">
                 <i:Interaction.Triggers>
@@ -61,7 +61,7 @@
             </ListView>
         </Grid>
 
-        <m:Map Grid.Row="3" Grid.Column="0" CredentialsProvider="AtfSrDlhVTMwel5UWFTechzhnRWXA_tbckinxagRYP7dW7VXmodcL0QwSeG5UsXd" 
-               ZoomLevel="7" Center="46, 8" Margin="0,20,0,0" TabIndex="2"/>
+        <m:Map Grid.Row="3" Grid.Column="0" x:Name="Map" CredentialsProvider="{StaticResource MapCredentials}" Mode="Road"
+               ZoomLevel="7" Center="{Binding Location, UpdateSourceTrigger=PropertyChanged}" Margin="0,20,0,0" TabIndex="2"/>
     </Grid>
 </Window>

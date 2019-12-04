@@ -66,7 +66,10 @@ namespace TransportApp.ViewModels
 
         private void OnExecuteSearchLocation(object parameter)
         {
-
+            var transport = new Transport();
+            var station = transport.GetStations(Station).StationList.FirstOrDefault(x => Equals(x.Name, Station));
+            if (station != null)
+                Location = new Location(station.Coordinate.XCoordinate, station.Coordinate.YCoordinate);
         }
 
         #endregion
@@ -111,7 +114,7 @@ namespace TransportApp.ViewModels
                 RaisePropertyChanged();
             }
         }
-        private Location _location = new Location(46, 8);
+        private Location _location = new Location(22, 18);
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is auto complete station active.
