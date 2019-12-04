@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Width="1366" Height="768" 
         MinWidth="667" MinHeight="375"
@@ -46,9 +47,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0" VerticalContentAlignment="Center"/>
-            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}" Margin="0,0,10,0" VerticalContentAlignment="Center"/>
-            <Button Grid.Row="0" Grid.Column="2" Content="Search" Style="{StaticResource DefaultButton}"/>
+            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="From" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}" Margin="0,0,10,0" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="To" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="Search"/>
 
             <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, Converter={StaticResource BoolToVis}}" Margin="0,0,10,0">
                 <i:Interaction.Triggers>
@@ -69,7 +70,7 @@
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,30,0,0">
             <TextBlock Text="Current location:" Margin="0,0,5,0" VerticalAlignment="Center"/>
             <TextBox Text="{Binding CurrentLocation}" IsReadOnly="True" Margin="0,0,20,0" VerticalContentAlignment="Center" BorderThickness="0"/>
-            <Button Content="Find connection" Style="{StaticResource DefaultButton}" Visibility="Collapsed"/>
+            <Button Content="Find connection" Visibility="Collapsed"/>
         </StackPanel>
 
         <!--TODO Implement a real map https://github.com/ericnewton76/gmaps-api-net-->

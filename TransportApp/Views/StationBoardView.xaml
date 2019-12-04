@@ -21,11 +21,11 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0">
-            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0">
+            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignIconButton}">
                 <Image Source="../Assets/Icons/Icons.16/back.png" Height="16"/>
             </Button>
 
-            <TextBlock Text="Connections" HorizontalAlignment="Center"/>
+            <TextBlock Text="StationBoard" HorizontalAlignment="Center"/>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">
@@ -34,20 +34,19 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" x:Name="TxtStation" Text="{Binding Station}" Margin="0,0,20,0"/>
-            <Button Grid.Column="1" Content="Search train station" Command="{Binding SearchTrainStationCommand}" Style="{StaticResource DefaultButton}"/>
+            <TextBox Grid.Column="0" x:Name="TxtStation" Text="{Binding Station}" VerticalContentAlignment="Center" Margin="0,0,20,0"/>
+            <Button Grid.Column="1" Content="Search train station" Command="{Binding SearchTrainStationCommand}"/>
         </Grid>
 
-        <DataGrid Grid.Row="2" Grid.Column="0" x:Name="DgrStationBoard" AutoGenerateColumns="False" Margin="0,20,0,0">
+        <DataGrid Grid.Row="2" Grid.Column="0" x:Name="DgrStationBoard" ItemsSource="{Binding StationBoards}" AutoGenerateColumns="False" Margin="0,20,0,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Birthday" Binding="{Binding Birthday}" />
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Number" Binding="{Binding Number}"/>
+                <DataGridTextColumn Header="Operator" Binding="{Binding Operator}"/>
+                <DataGridTextColumn Header="Last departure" Binding="{Binding Stop.Departure}"/>
+                <DataGridTextColumn Header="End-Location" Binding="{Binding To}"/>
             </DataGrid.Columns>
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Details}" Margin="10" />
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
         </DataGrid>
     </Grid>
 </Window>

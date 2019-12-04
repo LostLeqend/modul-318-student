@@ -137,6 +137,12 @@
     <PackageReference Include="Expression.Blend.Sdk">
       <Version>1.0.2</Version>
     </PackageReference>
+    <PackageReference Include="MaterialDesignColors">
+      <Version>1.2.1-ci828</Version>
+    </PackageReference>
+    <PackageReference Include="MaterialDesignThemes">
+      <Version>3.0.0-ci828</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Maps.MapControl.WPF">
       <Version>1.0.0.3</Version>
     </PackageReference>

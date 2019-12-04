@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using SwissTransport;
 using TransportApp.Base;
@@ -6,7 +9,7 @@ using TransportApp.Views;
 
 namespace TransportApp.ViewModels
 {
-    public class StationBoardViewModel
+    public class StationBoardViewModel : BaseViewModel
     {
         #region Initialization
 
@@ -23,9 +26,21 @@ namespace TransportApp.ViewModels
 
         private void OnExecuteSearchTrainStation(object parameter)
         {
-            var transport = new Transport();
-            Station = transport.GetStations("luzern")
-            var stationBoard = transport.GetStationBoard(testStation, "0");
+            if (string.IsNullOrWhiteSpace(Station))
+                return;
+
+            try
+            {
+                var transport = new Transport();
+                var stationId = transport.GetStations(Station).StationList.FirstOrDefault(x => string.Equals(x.Name, Station, StringComparison.CurrentCultureIgnoreCase))?.Id;
+                if (stationId == null)
+                    throw new Exception("This station does not exist.");
+                StationBoards = transport.GetStationBoard(Station, stationId).Entries;
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
         }
 
         #endregion
@@ -48,7 +63,34 @@ namespace TransportApp.ViewModels
 
         #region Properties
 
-        public Station Station { get; set; }
+        /// <summary>
+        /// Gets or sets the station.
+        /// </summary>
+        public string Station
+        {
+            get => _station;
+            set
+            {
+                _station = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _station;
+
+        /// <summary>
+        /// Gets or sets the station boards.
+        /// </summary>
+        public List<StationBoard> StationBoards
+        {
+            get => _stationBoards;
+            set
+            {
+                _stationBoards = value;
+                RaisePropertyChanged();
+            }
+        }
+        private List<StationBoard> _stationBoards;
 
         #endregion
 

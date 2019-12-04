@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Width="1366" Height="768" 
         MinWidth="667" MinHeight="375"
@@ -23,11 +24,11 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0">
-            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0">
+            <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignIconButton}">
                 <Image Source="../Assets/Icons/Icons.16/back.png" Height="16"/>
             </Button>
 
-            <TextBlock Text="StationBoard" HorizontalAlignment="Center"/>
+            <TextBlock Text="Connections" HorizontalAlignment="Center"/>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" Margin="0,20,0,0">
@@ -40,8 +41,8 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0"/>
-            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}"/>
+            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TxtStartLocation" Text="{Binding StartLocation}" Margin="0,0,10,0" materialDesign:HintAssist.Hint="From" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtEndLocation" Text="{Binding EndLocation}" materialDesign:HintAssist.Hint="To" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
             <ListView Grid.Row="1" Grid.Column="0" x:Name="LvCompleteStartLocation" DisplayMemberPath="Name" ItemsSource="{Binding StationList.StationList}" Visibility="{Binding IsCompleteStartLocationActive, Converter={StaticResource BoolToVis}}" Margin="0,0,10,0">
                 <i:Interaction.Triggers>
@@ -79,7 +80,7 @@
 
             <CheckBox Grid.Row="1" Grid.Column="2" Content="Is time arrival-time" IsChecked="{Binding IsArrivalTime}" VerticalAlignment="Center" Margin="0,0,20,0"/>
 
-            <Button Grid.Row="1" Grid.Column="3" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}" Style="{StaticResource DefaultButton}"/>
+            <Button Grid.Row="1" Grid.Column="3" x:Name="TxtSearchConnection" Content="Search" Command="{Binding SearchConnectionCommand}"/>
         </Grid>
 
         <DataGrid Grid.Row="3" Grid.Column="0" Name="DgrConnections" ItemsSource="{Binding ConnectionList.ConnectionList}" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" Margin="0,20,0,0">
